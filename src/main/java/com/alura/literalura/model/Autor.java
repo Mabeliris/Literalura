@@ -1,12 +1,34 @@
 package com.alura.literalura.model;
 
-import java.util.Optional;
+import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Table(name = "autores")
 public class Autor {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nombre;
     private Integer fechaNacimiento;
-    private Optional<Integer> fechaDeDefuncion;
+    private Integer fechaDeDefuncion;
+
+    //@OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, orphanRemoval = true)
+    //private List<Libro> libros = new ArrayList<>();
+
+    public Autor() {}
+
+    public Autor(String nombre, Integer fechaNacimiento, Integer fechaDeDefuncion) {
+        this.nombre = nombre;
+        this.fechaNacimiento = fechaNacimiento;
+        this.fechaDeDefuncion = fechaDeDefuncion;
+        //this.libros=libros;
+    }
+
+
 
     public Long getId() {
         return id;
@@ -32,11 +54,21 @@ public class Autor {
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    public Optional<Integer> getFechaDeDefuncion() {
+    public Integer getFechaDeDefuncion() {
         return fechaDeDefuncion;
     }
 
-    public void setFechaDeDefuncion(Optional<Integer> fechaDeDefuncion) {
+    public void setFechaDeDefuncion(Integer fechaDeDefuncion) {
         this.fechaDeDefuncion = fechaDeDefuncion;
+    }
+
+
+
+    @Override
+    public String toString() {
+        return
+                "nombre='" + nombre + '\'' +
+                ", fechaNacimiento=" + fechaNacimiento +
+                ", fechaDeDefuncion=" + fechaDeDefuncion ;
     }
 }

@@ -1,5 +1,6 @@
 package com.alura.literalura.principal;
 
+import com.alura.literalura.model.Autor;
 import com.alura.literalura.model.Libro;
 import com.alura.literalura.model.LibroDatos;
 import com.alura.literalura.model.ResultApi;
@@ -18,14 +19,14 @@ import java.util.Scanner;
 public class Principal {
 
     private final Scanner teclado = new Scanner(System.in);
-    private LibroService service;
-    private LibroRepository repository;
+    private final LibroService service;
+    private final LibroRepository repository;
     private static final String URL_BASE = "https://gutendex.com/books/" ;
     private final ConsumoApi consumoApi= new ConsumoApi();
     private final ConvierteDatos convierteDatos= new ConvierteDatos();
     private String json;
     private List<Libro> libro;
-    private final List <LibroDatos> datosSerie = new ArrayList<>();
+    private final List <LibroDatos> datosLibros = new ArrayList<>();
 
 
 
@@ -63,6 +64,14 @@ public class Principal {
                     break;
                 case 2:
                     librosRegistrados();
+                    break;
+                case 3:
+                    autoresRegistrados();
+                case 4:
+                    autoresVivos();
+                case 5:
+                    listarLibrosPorIdioma();
+
                 case 0:
                     System.out.println("Cerrando la aplicación...");
                     break;
@@ -75,9 +84,7 @@ public class Principal {
 
     }
 
-
-
-    private LibroDatos guardarDatos() {
+    private LibroDatos buscarLibroEnApi() {
 
         System.out.println("Ingrese el titulo del libro que desea buscar");
         var tituloIngresado= teclado.nextLine();
@@ -98,30 +105,71 @@ public class Principal {
             return null;
 
         }
-
-
     }
 
-    private void buscarLibroPorTitulo(){
-        LibroDatos datos =guardarDatos();
+    private Autor convertirAutor(LibroDatos datos) {
 
-        if (datos!=null){
-            Libro libro=new Libro(datos);
-            repository.save(libro);
-            System.out.println(datos);
-        }else{
+        var autorDto = datos.autor().get(0);
+
+        return new Autor(
+                autorDto.nombre(),
+                autorDto.fechaNacimiento(),
+                autorDto.fechaDeDefuncion()
+        );
+    }
+
+
+    private void buscarLibroPorTitulo() {
+
+        LibroDatos datos = buscarLibroEnApi();
+
+        if (datos != null) {
+
+            Autor autor = convertirAutor(datos);
+            service.guardarLibroConAutor(datos, autor);
+
+            System.out.println("Libro guardado correctamente");
+
+        } else {
             System.out.println("No se encontró ningún libro con ese título.");
         }
-
     }
-
 
 
     private void librosRegistrados() {
 
+
+           List<Libro> librosRegistrados= service.librosRegistrados();
+           System.out.println(librosRegistrados);
     }
 
+    private void autoresRegistrados() {
+
+        List<Autor> autoresRegistrados = service.autoresRegistrados();
+        System.out.println(autoresRegistrados);
+
+    }
+
+    private void autoresVivos() {
+        System.out.println("ingresa el año que desea revisar: ");
+        var anioVivo= teclado.nextInt();
+        teclado.nextLine();
+        List<Autor> autoresvivos=service.autoresVivosEn(anioVivo);
+
+        if (autoresvivos.isEmpty()){
+            System.out.println("No se han encontrado autores vivos para este año");
+        }else{
+            System.out.println(autoresvivos);
+        }
+    }
+
+    private void listarLibrosPorIdioma() {
+        System.out.println("¿En qué idioma necesita revisar libros? ");
+        var idiomas= teclado.nextLine().substring(0,2);
+        List<Libro> listarLibrosPorIdioma= service.listarLibrosPorIdioma(idiomas);
+        System.out.println("Estos son los libros en " + idiomas + ":" + listarLibrosPorIdioma);
 
 
+    }
 
 }

@@ -9,7 +9,7 @@ import java.util.Optional;
 public record AutorDatos(
         @JsonAlias("name") String nombre,
         @JsonAlias("birth_year") Integer fechaNacimiento,
-        @JsonAlias("death_year") Optional<Integer> fechaDeDefuncion
+        @JsonAlias("death_year") Integer fechaDeDefuncion
 
 ) {
 }
