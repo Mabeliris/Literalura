@@ -75,12 +75,11 @@ public class Libro {
 
     @Override
     public String toString() {
-        return "Libro{" +
+        return
                 "id=" + id +
                 ", titulo='" + titulo + '\'' +
                 ", autor='" + autor + '\'' +
                 ", idioma='" + idioma + '\'' +
-                ", numeroDeDescarga=" + numeroDeDescarga +
-                '}';
+                ", numeroDeDescarga=" + numeroDeDescarga ;
     }
 }

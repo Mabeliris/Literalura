@@ -1,9 +1,6 @@
 package com.alura.literalura.principal;
 
-import com.alura.literalura.model.Autor;
-import com.alura.literalura.model.Libro;
-import com.alura.literalura.model.LibroDatos;
-import com.alura.literalura.model.ResultApi;
+import com.alura.literalura.model.*;
 import com.alura.literalura.repository.LibroRepository;
 import com.alura.literalura.service.ConsumoApi;
 import com.alura.literalura.service.ConvierteDatos;
@@ -67,10 +64,13 @@ public class Principal {
                     break;
                 case 3:
                     autoresRegistrados();
+                    break;
                 case 4:
                     autoresVivos();
+                    break;
                 case 5:
                     listarLibrosPorIdioma();
+                    break;
 
                 case 0:
                     System.out.println("Cerrando la aplicación...");
@@ -139,13 +139,13 @@ public class Principal {
     private void librosRegistrados() {
 
 
-           List<Libro> librosRegistrados= service.librosRegistrados();
+           List<LibroDto> librosRegistrados= service.librosRegistrados();
            System.out.println(librosRegistrados);
     }
 
     private void autoresRegistrados() {
 
-        List<Autor> autoresRegistrados = service.autoresRegistrados();
+        List<AutorDto> autoresRegistrados = service.autoresRegistrados();
         System.out.println(autoresRegistrados);
 
     }
@@ -154,7 +154,7 @@ public class Principal {
         System.out.println("ingresa el año que desea revisar: ");
         var anioVivo= teclado.nextInt();
         teclado.nextLine();
-        List<Autor> autoresvivos=service.autoresVivosEn(anioVivo);
+        List<AutorDto> autoresvivos=service.autoresVivosEn(anioVivo);
 
         if (autoresvivos.isEmpty()){
             System.out.println("No se han encontrado autores vivos para este año");
@@ -166,8 +166,8 @@ public class Principal {
     private void listarLibrosPorIdioma() {
         System.out.println("¿En qué idioma necesita revisar libros? ");
         var idiomas= teclado.nextLine().substring(0,2);
-        List<Libro> listarLibrosPorIdioma= service.listarLibrosPorIdioma(idiomas);
-        System.out.println("Estos son los libros en " + idiomas + ":" + listarLibrosPorIdioma);
+        List<LibroDto> listarLibrosPorIdioma= service.listarLibrosPorIdioma(idiomas);
+        System.out.println("Estos son los libros en ese idioma :" + listarLibrosPorIdioma);
 
 
     }
